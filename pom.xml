@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>red.asuka.alice</groupId>
+    <artifactId>aw-alice-public-house-server</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>alice-controller</module>
+        <module>alice-persist</module>
+        <module>alice-deps</module>
+        <module>alice-service</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.2.7.RELEASE</version>
+        <artifactId>spring-boot-starter-parent</artifactId>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <docker.image.prefix>aw-alice-server</docker.image.prefix>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.encoding>UTF-8</project.build.encoding>
+        <project.build.locales>zh_CN</project.build.locales>
+        <project.build.jdk>1.8</project.build.jdk>
+        <project.java.version>1.8</project.java.version>
+
+        <swagger.version>2.9.2</swagger.version>
+        <swagger.models.version>1.5.21</swagger.models.version>
+
+        <!--SpringCloud 版本-->
+        <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
+        <version.springcloud>1.4.7.RELEASE</version.springcloud>
+        <!-- nacos 服务发现/配置管理 -->
+        <alibaba.cloud.version>2.2.1.RELEASE</alibaba.cloud.version>
+        <version.spring-test>5.1.3.RELEASE</version.spring-test>
+        <!--SpringBoot 版本-->
+        <version.springboot>2.2.7.RELEASE</version.springboot>
+        <version.lombok>1.18.10</version.lombok>
+        <!--Mysql connector-->
+        <version.mysql>5.1.42</version.mysql>
+        <!--Commons-lang3 工具箱：StringUtils、RandomStringUtils、NumberUtils...等等-->
+        <version.apache.commons>3.9</version.apache.commons>
+        <!--apache http组件-->
+        <version.http-client>4.5.12</version.http-client>
+        <!--mybatis/mybatis-spring-->
+        <version.mybatis>3.5.0</version.mybatis>
+        <version.spring-mybatis>2.0.0</version.spring-mybatis>
+        <!-- 轻量级的大数据量的并行处理(批处理)的框架 -->
+        <version.boot.batch>2.1.2.RELEASE</version.boot.batch>
+        <!-- 注解事务 -->
+        <version.spring.tx>5.2.8.RELEASE</version.spring.tx>
+        <!-- 使用logstash结合logback收集微服务日志 -->
+        <version.logback>5.3</version.logback>
+        <version.jjwt>0.9.1</version.jjwt>
+        <!-- Jackson json处理 -->
+        <version.jackson>2.10.0</version.jackson>
+        <version.com-aliyun-openservices>1.8.0.Final</version.com-aliyun-openservices>
+        <!-- Shiro 权限管理 -->
+        <version.shiro>1.5.1</version.shiro>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${version.lombok}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>${version.springcloud}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${version.springboot}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${version.springboot}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${version.springboot}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${version.springboot}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--        spring配置文件-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${version.springboot}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${version.logback}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>${alibaba.cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>${alibaba.cloud.version}</version>
+            </dependency>
+            <!-- Sentinel限流器 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${alibaba.cloud.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${version.spring.tx}</version>
+            </dependency>
+
+            <!-- redis -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${version.springboot}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${version.spring-test}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${version.springboot}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+                <version>2.2.2.RELEASE</version>
+            </dependency>
+
+            <!-- Brantch -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-batch</artifactId>
+                <version>${version.boot.batch}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${version.springboot}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${version.mysql}</version>
+            </dependency>
+
+            <!-- mybatis -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${version.mybatis}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${version.spring-mybatis}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.apache.commons}</version>
+            </dependency>
+
+            <!-- httpClient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${version.http-client}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${version.http-client}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
+
+            <!-- shiro -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${version.shiro}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- maven 私服配置 -->
+    <repositories>
+        <repository>
+            <id>aliyun-repos</id>
+            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+<!--        <repository>-->
+<!--            <id>dev-snapshots</id>-->
+<!--            <name>dev snapshots repo</name>-->
+<!--            <url>http://127.0.0.1:8080/repository/dev-snapshots/</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--        </repository>-->
+    </repositories>
+
+    <!--maven 插件仓库-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun-repos</id>
+            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+<!--        <pluginRepository>-->
+<!--            <id>dev-snapshots</id>-->
+<!--            <name>dev snapshots repo</name>-->
+<!--            <url>http://127.0.0.1:8080/repository/dev-snapshots/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--        </pluginRepository>-->
+    </pluginRepositories>
+
+    <!-- maven 私服仓库 -->
+<!--    <distributionManagement>-->
+<!--        <snapshotRepository>-->
+<!--            <id>dev-snapshots</id>-->
+<!--            <url>http://127.0.0.1:8080/repository/dev-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
+<!--    <build>-->
+<!--        <pluginManagement>-->
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                    <configuration>-->
+<!--                        <source>${project.build.jdk}</source>-->
+<!--                        <target>${project.build.jdk}</target>-->
+<!--                        <encoding>${project.build.encoding}</encoding>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-surefire-plugin</artifactId>-->
+<!--                    <version>2.14</version>-->
+<!--                    <configuration>-->
+<!--                        <skip>true</skip>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.projectlombok</groupId>-->
+<!--                    <artifactId>lombok-maven-plugin</artifactId>-->
+<!--                </plugin>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-resources-plugin</artifactId>-->
+<!--                    <version>2.6</version>-->
+<!--                    <configuration>-->
+<!--                        <encoding>${project.build.encoding}</encoding>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                    <version>${version.springboot}</version>-->
+<!--                    <configuration>-->
+<!--                        <fork>true</fork>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+<!--            </plugins>-->
+<!--        </pluginManagement>-->
+<!--    </build>-->
+</project>

@@ -1,0 +1,74 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <!-- 日志在工程中的输出位置 -->
+    <property name="LOG_FILE" value="/apps/log/alice"/>
+    <!-- 控制台的日志输出样式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- 控制台Appender -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 为logstash输出的json格式的Appender -->
+<!--    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+<!--        <destination>127.0.0.1:9901</destination>-->
+<!--        <encoder charset="UTF-8"-->
+<!--                 class="net.logstash.logback.encoder.LogstashEncoder" >-->
+<!--            &lt;!&ndash; "appname":"playground" 的作用是指定创建索引的名字时用，并且在生成的文档中会多了这个字段  &ndash;&gt;-->
+<!--            <customFields>{"appname":"playground-public"}</customFields>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <appender name="outFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>[%-5level] [%date{HH:mm:ss}] %-80logger{80} [%-4line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <file>${LOG_FILE}/all.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}/all.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>64 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>[%-5level] [%date{HH:mm:ss}] %-80logger{80} [%-4line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <file>${LOG_FILE}/allError.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}/allError.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>64 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+<!--        <appender-ref ref="logstash"/>-->
+        <appender-ref ref="outFile"/>
+        <appender-ref ref="errorFile"/>
+    </root>
+</configuration>

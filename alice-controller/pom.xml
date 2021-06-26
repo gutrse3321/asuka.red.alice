@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>aw-alice-public-house-server</artifactId>
+        <groupId>red.asuka.alice</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>red.asuka.alice</groupId>
+    <artifactId>alice-controller</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>red.asuka.alice</groupId>
+            <artifactId>alice-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>dev</profileActive>
+                <defaultZone>10.9.4.74:8848</defaultZone>
+                <sentinelZone>10.9.4.74:8080</sentinelZone>
+                <nacosClientIp>127.0.0.1</nacosClientIp>
+                <nacosClientPort>26699</nacosClientPort>
+                <addressIP>false</addressIP>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>comdev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+                <defaultZone>10.9.4.74:8848</defaultZone>
+                <sentinelZone>10.9.4.74:8080</sentinelZone>
+                <nacosClientIp>127.0.0.1</nacosClientIp>
+                <nacosClientPort>26699</nacosClientPort>
+                <addressIP>false</addressIP>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>comprod</id>
+            <properties>
+                <profileActive>server_dev</profileActive>
+                <defaultZone>172.21.0.11:8848</defaultZone>
+                <sentinelZone>172.21.0.11:7777</sentinelZone>
+                <addressIP>true</addressIP>
+                <nacosClientIp>172.21.0.11</nacosClientIp>
+                <nacosClientPort>26666</nacosClientPort>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>yjprod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+                <defaultZone>10.1.127.41:8848</defaultZone>
+                <sentinelZone>10.1.127.41:7777</sentinelZone>
+                <nacosClientIp>10.1.127.42</nacosClientIp>
+                <nacosClientPort>26583</nacosClientPort>
+                <addressIP>true</addressIP>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>bdprod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+                <defaultZone>10.1.127.41:8848</defaultZone>
+                <sentinelZone>10.1.127.41:7777</sentinelZone>
+                <nacosClientIp>10.1.127.42</nacosClientIp>
+                <nacosClientPort>26583</nacosClientPort>
+                <addressIP>true</addressIP>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>publicHouse-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <resources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <mainClass>red.asuka.alice.server.PublicHouseApiApplication</mainClass>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
+</project>
